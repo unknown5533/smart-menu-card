@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Smart Menu Creator</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" routerLink="/menu">
+        <ion-icon name="restaurant" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+    <form [formGroup]="itemForm">
+      <ion-item>
+        <ion-label position="floating">Describe your dish</ion-label>
+        <ion-textarea formControlName="text" placeholder="e.g., Spicy chicken curry with steamed rice for 12"></ion-textarea>
+      </ion-item>
+      <ion-note color="danger" *ngIf="itemForm?.get('text')?.invalid && itemForm?.get('text')?.touched">
+        Please provide a description (at least 5 characters).
+      </ion-note>
+
+      <ion-radio-group [(ngModel)]="imageType" name="imageType">
+        <ion-item>
+          <ion-label>Generate AI Image</ion-label>
+          <ion-radio value="ai"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Upload a Photo</ion-label>
+          <ion-radio value="photo"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <ion-item *ngIf="imageType === 'photo'">
+        <ion-input type="file" (change)="onFileChange($event)"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="createItem()" [disabled]="itemForm.invalid" class="ion-margin-top">
+        Create Menu Item
+      </ion-button>
+    </form>
+
+    <div *ngIf="createdItem" class="created-item ion-margin-top">
+      <h2>Item Created!</h2>
+      <ion-card>
+        <img [src]="createdItem.imageUrl" *ngIf="createdItem.imageUrl" alt="Image of {{ createdItem.title }}">
+        <ion-card-header>
+          <ion-card-title>{{ createdItem.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ createdItem.description }}</p>
+          <h3>Price: ${{ createdItem.price.toFixed(2) }}</h3>
+        </ion-card-content>
+      </ion-card>
+      <ion-button expand="block" fill="outline" (click)="shareItem()">
+        <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+        Share on WhatsApp
+      </ion-button>
+      <ion-button expand="block" fill="clear" (click)="resetForm()">Create Another Item</ion-button>
+    </div>
+  </div>
+</ion-content>

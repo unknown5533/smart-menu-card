@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Our Menu</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="cart" slot="icon-only" routerLink="/cart"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of menuItems">
+      <ion-thumbnail slot="start">
+        <img [src]="item.imageUrl || 'https://ionicframework.com/docs/img/demos/thumbnail.svg'" alt="{{ item.title }}">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.description }}</p>
+        <h3>${{ item.price.toFixed(2) }}</h3>
+      </ion-label>
+      <ion-button (click)="addToCart(item)" fill="clear" slot="end">
+        <ion-icon name="add-circle" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

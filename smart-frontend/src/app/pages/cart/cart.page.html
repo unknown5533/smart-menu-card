@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Your Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding" *ngIf="cartItems$ | async as items">
+    <div *ngIf="items.length > 0; else emptyCart">
+      <ion-list>
+        <ion-item *ngFor="let item of items">
+          <ion-thumbnail slot="start">
+            <img [src]="item.imageUrl || 'https://ionicframework.com/docs/img/demos/thumbnail.svg'" alt="{{ item.title }}">
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ item.title }}</h2>
+            <p>${{ item.price.toFixed(2) }} each</p>
+          </ion-label>
+          <ion-item slot="end" lines="none">
+            <ion-button (click)="removeFromCart(item)" fill="clear" color="danger">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+             <ion-item style="width: 80px;">
+              <ion-label position="floating">Qty</ion-label>
+              <ion-input type="number" [value]="item.quantity" (ionChange)="updateQuantity(item, $event)"></ion-input>
+            </ion-item>
+          </ion-item>
+        </ion-item>
+      </ion-list>
+
+      <div class="ion-margin-top ion-padding">
+        <h2>Total: ${{ total.toFixed(2) }}</h2>
+        <ion-button expand="block" (click)="checkout()">Proceed to Checkout</ion-button>
+      </div>
+    </div>
+
+    <ng-template #emptyCart>
+      <div class="ion-text-center ion-padding">
+        <h2>Your cart is empty.</h2>
+        <p>Add some delicious items from the menu!</p>
+        <ion-button routerLink="/menu">Go to Menu</ion-button>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>
